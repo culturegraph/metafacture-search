@@ -9,6 +9,8 @@ import org.culturegraph.mf.morph.Metamorph;
 import org.culturegraph.mf.search.IndexConstants;
 import org.culturegraph.mf.stream.converter.CGEntityEncoder;
 import org.culturegraph.mf.stream.pipe.StreamTee;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * writes an event stream (see {@link StreamReceiver}) to a Lucene Index. Still
@@ -20,20 +22,28 @@ import org.culturegraph.mf.stream.pipe.StreamTee;
 public final class StreamIndexer implements StreamReceiver {
 
 	
+	
 	private final BatchIndexer indexer;
 	private final StreamTee tee = new StreamTee();
+	private static final Logger LOG = LoggerFactory.getLogger(StreamIndexer.class);
 
 	public StreamIndexer(final IndexWriter indexWriter) {
 		indexer = new BatchIndexer(indexWriter);
-		tee.setReceiver(new IndexedFieldReceiver(indexer));
-		tee.setReceiver(new CGEntityEncoder()).setReceiver(new SerializedFieldReceiver(indexer));
+		tee.addReceiver(new IndexedFieldReceiver(indexer));
+		final CGEntityEncoder encoder = new CGEntityEncoder();
+		tee.addReceiver(encoder);
+		encoder.setReceiver(new SerializedFieldReceiver(indexer));
 	}
 	
 
 	public StreamIndexer(final IndexWriter indexWriter, final Metamorph metamorph) {
 		indexer = new BatchIndexer(indexWriter);
-		tee.setReceiver(metamorph).setReceiver(new IndexedFieldReceiver(indexer));
-		tee.setReceiver(new CGEntityEncoder()).setReceiver(new SerializedFieldReceiver(indexer));
+		tee.addReceiver(metamorph);
+		metamorph.setReceiver(new IndexedFieldReceiver(indexer));
+		final CGEntityEncoder encoder = new CGEntityEncoder();
+		tee.addReceiver(encoder);
+		encoder.setReceiver(new SerializedFieldReceiver(indexer));
+		
 	}
 	
 	public IndexWriter getIndexWriter(){
@@ -68,6 +78,7 @@ public final class StreamIndexer implements StreamReceiver {
 
 	@Override
 	public void literal(final String name, final String value) {
+		LOG.info("teeing " + name + " " + value);
 		tee.literal(name, value);
 	}
 
@@ -102,6 +113,9 @@ public final class StreamIndexer implements StreamReceiver {
 	
 		@Override
 		public void literal(final String name, final String value) {
+			
+			LOG.info("indexing " + name + " " + value);
+			
 			indexer.add(new Field(name, value, Field.Store.NO, Field.Index.ANALYZED));
 		}
 	}
