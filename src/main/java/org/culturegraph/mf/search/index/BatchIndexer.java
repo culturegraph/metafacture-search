@@ -59,6 +59,7 @@ public final class BatchIndexer{
 	}
 
 	public void add(final Field field) {
+		//LOG.info("adding field " + field);
 		currentDoc.add(field);
 	}
 	

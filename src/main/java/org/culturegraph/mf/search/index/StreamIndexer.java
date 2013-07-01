@@ -78,7 +78,7 @@ public final class StreamIndexer implements StreamReceiver {
 
 	@Override
 	public void literal(final String name, final String value) {
-		LOG.info("teeing " + name + " " + value);
+		//LOG.info("teeing " + name + " " + value);
 		tee.literal(name, value);
 	}
 
@@ -113,9 +113,6 @@ public final class StreamIndexer implements StreamReceiver {
 	
 		@Override
 		public void literal(final String name, final String value) {
-			
-			LOG.info("indexing " + name + " " + value);
-			
 			indexer.add(new Field(name, value, Field.Store.NO, Field.Index.ANALYZED));
 		}
 	}
