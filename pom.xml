@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.culturegraph</groupId>
 	<artifactId>metafacture-search</artifactId>
-	<version>0.0.0</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<description>Library for lucene-based search functionality for culturegraph</description>
 
 	<properties>
