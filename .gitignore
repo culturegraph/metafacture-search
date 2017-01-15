@@ -8,3 +8,8 @@
 .classpath
 .project
 .settings/
+
+# Ignore Intellij project files:
+*.iml
+.idea/
+
