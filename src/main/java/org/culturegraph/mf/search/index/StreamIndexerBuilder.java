@@ -8,7 +8,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.NoMergeScheduler;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
-import org.culturegraph.mf.morph.Metamorph;
+import org.culturegraph.mf.metamorph.Metamorph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,15 +29,15 @@ public final class StreamIndexerBuilder {
 		if (analyzer == null) {
 			throw new IllegalArgumentException("'analyzer' must not be null");
 		}
-	
 
-	
+
+
 
 		try {
 			final IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
 			indexWriterConfig.setMaxBufferedDocs(IndexWriterConfig.DISABLE_AUTO_FLUSH);
 
-		
+
 			LOG.info("Indexer Ram buffer: " + ramBuffer + "mb");
 			indexWriterConfig.setRAMBufferSizeMB(ramBuffer);
 			indexWriterConfig.setMergeScheduler(NoMergeScheduler.INSTANCE);

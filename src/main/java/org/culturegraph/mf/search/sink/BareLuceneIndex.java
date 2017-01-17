@@ -10,10 +10,10 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.NoMergeScheduler;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
-import org.culturegraph.mf.framework.DefaultStreamReceiver;
 import org.culturegraph.mf.framework.StreamReceiver;
 import org.culturegraph.mf.framework.annotations.Description;
 import org.culturegraph.mf.framework.annotations.In;
+import org.culturegraph.mf.framework.helpers.DefaultStreamReceiver;
 import org.culturegraph.mf.search.index.BatchIndexer;
 import org.culturegraph.mf.search.index.IndexException;
 
@@ -35,15 +35,15 @@ public final class BareLuceneIndex extends DefaultStreamReceiver {
 	public void setStoreId(boolean storeId) {
 		this.storeId = storeId;
 	}
-	
+
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
 	}
-	
+
 	public void setRamBuffer(int ramBuffer) {
 		this.ramBuffer = ramBuffer;
 	}
-	
+
 	@Override
 	public void startRecord(final String identifier) {
 		if (!init) {
@@ -58,7 +58,7 @@ public final class BareLuceneIndex extends DefaultStreamReceiver {
 		}else{
 			indexer.startDocument();
 		}
-		
+
 	}
 
 	@Override
