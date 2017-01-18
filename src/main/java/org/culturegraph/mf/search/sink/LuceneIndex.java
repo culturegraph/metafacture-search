@@ -37,15 +37,11 @@ public final class LuceneIndex extends DefaultStreamReceiver {
 		this.batchSize = batchSize;
 	}
 
-	/**
-	 * @param ramBuffer in MB
-	 */
 	public void setRamBuffer(int ramBuffer) {
 		this.ramBuffer = ramBuffer;
 	}
 
 	public LuceneIndex(final String morphDef) {
-		super();
 		this.morphDef = morphDef;
 	}
 
@@ -100,9 +96,11 @@ public final class LuceneIndex extends DefaultStreamReceiver {
 		}else{
 			analyzedFields = textfields.keySet();
 		}
-		final Analyzer analyzer = new TextKeywordsMixedAnalyzerFactory(analyzedFields).create();
+		final Analyzer analyzer =
+				new TextKeywordsMixedAnalyzerFactory(analyzedFields).create();
 
-		streamIndexer = StreamIndexerBuilder.build(new NIOFSDirectory(new File(indexPath)), ramBuffer, batchSize, analyzer, morph);
+		streamIndexer = StreamIndexerBuilder.build(new NIOFSDirectory(
+				new File(indexPath)), ramBuffer, batchSize, analyzer, morph);
 		streamIndexer.getIndexWriter().setInfoStream(System.err);
 		init = true;
 	}

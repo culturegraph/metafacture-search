@@ -17,10 +17,11 @@ public final class StreamIndexerBuilder {
 	private static final Logger LOG = LoggerFactory.getLogger(StreamIndexerBuilder.class);
 
 	private StreamIndexerBuilder() {
-		// no instances
+		throw new AssertionError("No instances allowed");
 	}
 
-	public static StreamIndexer build(final Directory directory, final int ramBuffer, final int batchSize,
+	public static StreamIndexer build(final Directory directory,
+			final int ramBuffer, final int batchSize,
 			final Analyzer analyzer, final Metamorph morph) throws IOException {
 		if (directory == null) {
 			throw new IllegalArgumentException("'directory' must not be null");
@@ -30,13 +31,10 @@ public final class StreamIndexerBuilder {
 			throw new IllegalArgumentException("'analyzer' must not be null");
 		}
 
-
-
-
 		try {
-			final IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+			final IndexWriterConfig indexWriterConfig = new IndexWriterConfig(
+					Version.LUCENE_36, analyzer);
 			indexWriterConfig.setMaxBufferedDocs(IndexWriterConfig.DISABLE_AUTO_FLUSH);
-
 
 			LOG.info("Indexer Ram buffer: " + ramBuffer + "mb");
 			indexWriterConfig.setRAMBufferSizeMB(ramBuffer);
@@ -54,7 +52,9 @@ public final class StreamIndexerBuilder {
 			streamIndexer.setBatchSize(batchSize);
 			return streamIndexer;
 		} catch (NumberFormatException e) {
-			throw new IndexException("Error in indexer properties. Not a number: " + e.getMessage(), e);
+			throw new IndexException("Error in indexer properties. Not a number: " +
+					e.getMessage(), e);
 		}
 	}
+
 }

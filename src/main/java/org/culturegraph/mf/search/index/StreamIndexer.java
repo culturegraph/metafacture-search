@@ -9,23 +9,16 @@ import org.culturegraph.mf.framework.helpers.DefaultStreamReceiver;
 import org.culturegraph.mf.metamorph.Metamorph;
 import org.culturegraph.mf.plumbing.StreamTee;
 import org.culturegraph.mf.search.IndexConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * writes an event stream (see {@link StreamReceiver}) to a Lucene Index. Still
- * prototypical!
+ * Writes an event stream to a Lucene Index.
  *
  * @author Markus Michael Geipel
- *
  */
 public final class StreamIndexer implements StreamReceiver {
 
-
-
 	private final BatchIndexer indexer;
 	private final StreamTee tee = new StreamTee();
-	private static final Logger LOG = LoggerFactory.getLogger(StreamIndexer.class);
 
 	public StreamIndexer(final IndexWriter indexWriter) {
 		indexer = new BatchIndexer(indexWriter);
@@ -36,7 +29,8 @@ public final class StreamIndexer implements StreamReceiver {
 	}
 
 
-	public StreamIndexer(final IndexWriter indexWriter, final Metamorph metamorph) {
+	public StreamIndexer(final IndexWriter indexWriter,
+			final Metamorph metamorph) {
 		indexer = new BatchIndexer(indexWriter);
 		tee.addReceiver(metamorph);
 		metamorph.setReceiver(new IndexedFieldReceiver(indexer));
@@ -46,7 +40,7 @@ public final class StreamIndexer implements StreamReceiver {
 
 	}
 
-	public IndexWriter getIndexWriter(){
+	public IndexWriter getIndexWriter() {
 		return indexer.getIndexWriter();
 	}
 
@@ -78,7 +72,6 @@ public final class StreamIndexer implements StreamReceiver {
 
 	@Override
 	public void literal(final String name, final String value) {
-		//LOG.info("teeing " + name + " " + value);
 		tee.literal(name, value);
 	}
 
@@ -93,15 +86,13 @@ public final class StreamIndexer implements StreamReceiver {
 		indexer.close();
 	}
 
-
-	public void setBatchSize(final int batchSize) {
-		indexer.setBatchSize(batchSize);
-	}
-
 	public int getBatchSize() {
 		return indexer.getBatchSize();
 	}
 
+	public void setBatchSize(final int batchSize) {
+		indexer.setBatchSize(batchSize);
+	}
 
 	private static final class IndexedFieldReceiver extends DefaultStreamReceiver {
 		private final BatchIndexer indexer;
@@ -117,7 +108,9 @@ public final class StreamIndexer implements StreamReceiver {
 		}
 	}
 
-	private static final class SerializedFieldReceiver extends DefaultObjectReceiver<String> {
+	private static final class SerializedFieldReceiver
+			extends DefaultObjectReceiver<String> {
+
 		private final BatchIndexer indexer;
 
 		public SerializedFieldReceiver(final BatchIndexer indexer) {
@@ -127,7 +120,10 @@ public final class StreamIndexer implements StreamReceiver {
 
 		@Override
 		public void process(final String value) {
-			indexer.add(new Field(IndexConstants.SERIALIZED, value, Field.Store.YES, Field.Index.NO));
+			indexer.add(new Field(IndexConstants.SERIALIZED, value,
+					Field.Store.YES, Field.Index.NO));
 		}
+
 	}
+
 }

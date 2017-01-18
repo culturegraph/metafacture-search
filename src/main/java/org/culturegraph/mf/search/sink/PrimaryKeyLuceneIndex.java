@@ -31,7 +31,6 @@ public final class PrimaryKeyLuceneIndex extends DefaultStreamReceiver {
 		super();
 	}
 
-
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
 	}
@@ -59,7 +58,8 @@ public final class PrimaryKeyLuceneIndex extends DefaultStreamReceiver {
 
 	@Override
 	public void literal(final String name, final String value) {
-		indexer.add(new Field(name, value, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+		indexer.add(new Field(name, value, Field.Store.YES,
+				Field.Index.NOT_ANALYZED_NO_NORMS));
 	}
 
 	@Override
@@ -75,18 +75,21 @@ public final class PrimaryKeyLuceneIndex extends DefaultStreamReceiver {
 
 	private void initIndex() throws IOException {
 		try {
-			final IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, new KeywordAnalyzer());
+			final IndexWriterConfig indexWriterConfig = new IndexWriterConfig(
+					Version.LUCENE_36, new KeywordAnalyzer());
 			indexWriterConfig.setMaxBufferedDocs(IndexWriterConfig.DISABLE_AUTO_FLUSH);
 			indexWriterConfig.setRAMBufferSizeMB(ramBuffer);
 			indexWriterConfig.setMergeScheduler(NoMergeScheduler.INSTANCE);
 
-			final IndexWriter indexWriter = new IndexWriter(new NIOFSDirectory(new File(indexPath)), indexWriterConfig);
+			final IndexWriter indexWriter = new IndexWriter(new NIOFSDirectory(
+					new File(indexPath)), indexWriterConfig);
 			indexWriter.setInfoStream(System.err);
 			indexer = new BatchIndexer(indexWriter);
 			indexer.setBatchSize(batchSize);
 
 		} catch (NumberFormatException e) {
-			throw new IndexException("Error in indexer properties. Not a number: " + e.getMessage(), e);
+			throw new IndexException("Error in indexer properties. Not a number: " +
+					e.getMessage(), e);
 		}
 		init = true;
 	}

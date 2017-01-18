@@ -17,23 +17,20 @@ import org.apache.lucene.util.Version;
  * Factory for {@link PerFieldAnalyzerWrapper} which uses
  * {@link StandardAnalyzer} for textFields and {@link KeywordAnalyzer} for all
  * other fields.
- * 
+ *
  * @author Markus Michael Geipel
- * 
  */
 public final class TextKeywordsMixedAnalyzerFactory implements AnalyzerFactory {
 
 	private Set<String> textFields = new HashSet<String>();
 
-
 	public TextKeywordsMixedAnalyzerFactory(final String... textFields) {
 		setTextFields(textFields);
 	}
-	
+
 	public TextKeywordsMixedAnalyzerFactory(final Set<String> textFields) {
 		setTextFields(textFields);
 	}
-
 
 
 	public TextKeywordsMixedAnalyzerFactory() {
@@ -50,19 +47,18 @@ public final class TextKeywordsMixedAnalyzerFactory implements AnalyzerFactory {
 	}
 
 	public void setTextFields(final String... textFields) {
-
 		this.textFields.clear();
 		this.textFields.addAll(Arrays.asList(textFields));
 
 	}
-	
+
 	private void setTextFields(final Set<String> textFields) {
 		this.textFields = textFields;
-		
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + " with textfileds " + textFields;
 	}
+
 }
