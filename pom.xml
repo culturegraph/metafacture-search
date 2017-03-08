@@ -10,7 +10,7 @@
 
 	<groupId>org.culturegraph</groupId>
 	<artifactId>metafacture-search</artifactId>
-	<version>5.0.0-SNAPSHOT</version>
+	<version>4.1.0</version>
 
 	<description>Library for lucene-based search functionality for culturegraph</description>
 	<url>http://github.com/culturegraph/metafacture-core</url>
