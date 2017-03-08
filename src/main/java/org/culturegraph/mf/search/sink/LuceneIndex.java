@@ -99,9 +99,7 @@ public final class LuceneIndex extends DefaultStreamReceiver {
 		final Analyzer analyzer =
 				new TextKeywordsMixedAnalyzerFactory(analyzedFields).create();
 
-		streamIndexer = StreamIndexerBuilder.build(new NIOFSDirectory(
-				new File(indexPath)), ramBuffer, batchSize, analyzer, morph);
-		streamIndexer.getIndexWriter().setInfoStream(System.err);
+		streamIndexer = StreamIndexerBuilder.build(new NIOFSDirectory(new File(indexPath)), ramBuffer, batchSize, analyzer, morph);
 		init = true;
 	}
 

@@ -2,8 +2,8 @@ package org.culturegraph.mf.search.pipe;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Fieldable;
 import org.culturegraph.mf.formeta.FormetaDecoder;
+import org.apache.lucene.index.IndexableField;
 import org.culturegraph.mf.framework.StreamReceiver;
 import org.culturegraph.mf.framework.helpers.DefaultObjectPipe;
 import org.culturegraph.mf.framework.helpers.DefaultStreamPipe;
@@ -31,15 +31,13 @@ public final class LuceneDocDecoder
 		formetaDecoder
 				.setReceiver(removeRecordBoundery)
 				.setReceiver(receiver);
-		for (Fieldable field : doc.getFields()) {
-			final Field field2 = (Field) field;
-			final String name = field2.name();
+		for (IndexableField field : doc.getFields()) {
+			final String name = field.name();
 			if(!name.startsWith("_")){
-				receiver.literal(name, field2.stringValue());
+				receiver.literal(name, field.stringValue());
 			}else if(IndexConstants.SERIALIZED.equals(name)){
-				formetaDecoder.process(field2.stringValue());
+				formetaDecoder.process(field.stringValue());
 			}
-
 		}
 		receiver.endRecord();
 		return receiver;

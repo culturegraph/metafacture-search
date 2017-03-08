@@ -3,7 +3,7 @@ package org.culturegraph.mf.search.sink;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.lucene.analysis.KeywordAnalyzer;
+import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -81,9 +81,7 @@ public final class PrimaryKeyLuceneIndex extends DefaultStreamReceiver {
 			indexWriterConfig.setRAMBufferSizeMB(ramBuffer);
 			indexWriterConfig.setMergeScheduler(NoMergeScheduler.INSTANCE);
 
-			final IndexWriter indexWriter = new IndexWriter(new NIOFSDirectory(
-					new File(indexPath)), indexWriterConfig);
-			indexWriter.setInfoStream(System.err);
+			final IndexWriter indexWriter = new IndexWriter(new NIOFSDirectory(new File(indexPath)), indexWriterConfig);
 			indexer = new BatchIndexer(indexWriter);
 			indexer.setBatchSize(batchSize);
 
